@@ -62,12 +62,16 @@ public class Point implements Comparable<Point> {
         double rise = this.y - that.y;
         double run = this.x - that.x;
         
-        if (rise == 0 && run > 0) return +0.0;
-        else if (rise == 0 && run < 0) return -0.0;
-        else if (rise > 0 && run == 0) return Double.POSITIVE_INFINITY;
-        else if (rise < 0 && run == 0) return Double.NEGATIVE_INFINITY;
+        if (rise == 0 && run != 0) {
+            if (rise == 0 && run > 0) return +0.0;
+            else if (rise == 0 && run < 0) return -0.0;
+        }
+        if (run == 0) {
+            if (rise >= 0) return Double.POSITIVE_INFINITY;
+            else if (rise < 0) return Double.NEGATIVE_INFINITY;
+        }
         
-        double slope = (this.y - that.y)/(this.x - this.y);
+        double slope = rise/run;
         return slope;
     }
 
