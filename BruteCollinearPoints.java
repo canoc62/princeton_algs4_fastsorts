@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.*;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class BruteCollinearPoints {
     
@@ -20,12 +21,21 @@ public class BruteCollinearPoints {
         newArr = null;                                                                                    
     }
     
+    private void checkForDuplicates(Point[] points) {
+        for (int i = 1; i < points.length; i++) {
+            if (points[i].compareTo(points[i-1]) == 0) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+    
     public BruteCollinearPoints(Point[] points) {
         if (points == null) {
             throw new NullPointerException();                   
         }
         
         Arrays.sort(points);
+        checkForDuplicates(points);
          
         int N = points.length;
         
@@ -33,12 +43,8 @@ public class BruteCollinearPoints {
             if (points[i] == null) {
                 throw new NullPointerException();
             }
-            if (i > 0 && points[i-1].compareTo(points[i]) == 0) { 
-                throw new IllegalArgumentException();
-            }
             
             Point firstPoint = points[i];
-            
             
             for (int j = i + 1; j < N-2; j++) { 
                 Point secondPoint = points[j];
@@ -89,6 +95,7 @@ public class BruteCollinearPoints {
     
     public static void main(String[] args) {
         // read the N points from a file
+        
         In in = new In(args[0]);
         int N = in.readInt();
         
