@@ -22,12 +22,25 @@ public class FastCollinearPoints {
         newArr = null;                                                                                    
     }
     
+    private void checkForDuplicates(Point[] points) {
+        for (int i = 1; i < points.length; i++) {
+            if (points[i].compareTo(points[i-1]) == 0) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+    
     public FastCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new NullPointerException();                   
+        }
+        
+        checkForDuplicates(points);
         Arrays.sort(points);
         copyOfPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++) {
             copyOfPoints[i] = points[i];
-            System.out.println(copyOfPoints[i]);
+            //System.out.println(copyOfPoints[i]);
         }
         
         int N = points.length;
@@ -41,12 +54,12 @@ public class FastCollinearPoints {
       // }
             int count = 1;
            
-            System.out.println("\nPOINT i: " + points[i] + "\n");
+            //System.out.println("\nPOINT i: " + points[i] + "\n");
             
             for (int j = 1; j < N-1; j++) {
           
-                System.out.println("j - 1: " + copyOfPoints[j-1] + " slope: " + points[i].slopeTo(copyOfPoints[j-1]));
-                System.out.println("j: " + copyOfPoints[j] + " slope: " + points[i].slopeTo(copyOfPoints[j]));
+                //System.out.println("j - 1: " + copyOfPoints[j-1] + " slope: " + points[i].slopeTo(copyOfPoints[j-1]));
+                //System.out.println("j: " + copyOfPoints[j] + " slope: " + points[i].slopeTo(copyOfPoints[j]));
                 if (points[i].slopeTo(copyOfPoints[j]) == points[i].slopeTo(copyOfPoints[j-1])) {
                     //if(points[i].compareTo(copyOfPoints[j]) > 0) { 
                       //  count = 0;
@@ -60,7 +73,7 @@ public class FastCollinearPoints {
                         break;
                     }
                      
-                    System.out.println("count: " + count);
+                    //System.out.println("count: " + count);
                     
                     if (count == 3 ){//&& points[i].compareTo(copy)) {
                         //if(points[i].compareTo(copyOfPoints[j]) , 0) 
