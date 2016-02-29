@@ -7,6 +7,7 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class FastCollinearPoints {
     
+    private Point[] copyOfPoints;
     private LineSegment[] segments = new LineSegment[1];
     private int numberOfSegments = 0;
     
@@ -23,25 +24,61 @@ public class FastCollinearPoints {
     
     public FastCollinearPoints(Point[] points) {
         Arrays.sort(points);
+        copyOfPoints = new Point[points.length];
+        for (int i = 0; i < points.length; i++) {
+            copyOfPoints[i] = points[i];
+            System.out.println(copyOfPoints[i]);
+        }
+        
         int N = points.length;
         
         for (int i = 0; i < N; i++) {
-            Arrays.sort(points, points[i].slopeOrder());
-            for (int j = 1; j < N; i++) {
-                int count = 0;
-                if (points[i].slopeTo(points[j]) == points[i].slopeTo(points[j-1])) {
-                    count++;
-                    if (count == 3) {
-                        LineSegment newMaxSegment = new LineSegment(points[i], points[j]);
+            Arrays.sort(copyOfPoints);
+            Arrays.sort(copyOfPoints, points[i].slopeOrder());
+          // for (int x = 0; x < points.length; x++) {
+            //copyOfPoints[x] = points[i];
+           // System.out.println(copyOfPoints[x]);
+      // }
+            int count = 1;
+           
+            System.out.println("\nPOINT i: " + points[i] + "\n");
+            
+            for (int j = 1; j < N-1; j++) {
+          
+                System.out.println("j - 1: " + copyOfPoints[j-1] + " slope: " + points[i].slopeTo(copyOfPoints[j-1]));
+                System.out.println("j: " + copyOfPoints[j] + " slope: " + points[i].slopeTo(copyOfPoints[j]));
+                if (points[i].slopeTo(copyOfPoints[j]) == points[i].slopeTo(copyOfPoints[j-1])) {
+                    //if(points[i].compareTo(copyOfPoints[j]) > 0) { 
+                      //  count = 0;
+                    //}
+                    //else {
+                        count++;
+                    //}
+                        if(points[i].compareTo(copyOfPoints[j-1]) > 0) { //|| points[i].compareTo(copyOfPoints[j]) > 0) { 
+                        //count = 0;
+                        //i++;
+                        break;
+                    }
+                     
+                    System.out.println("count: " + count);
+                    
+                    if (count == 3 ){//&& points[i].compareTo(copy)) {
+                        //if(points[i].compareTo(copyOfPoints[j]) , 0) 
+                        LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
+                        if (segments.length == numberOfSegments) resize(segments.length*2);      
                         segments[numberOfSegments++] = newMaxSegment;
+                        
                     }
                     else if (count > 3) {
                         segments[numberOfSegments-1] = null;
-                        LineSegment newMaxSegment = new LineSegment(points[i], points[j]);
+                        LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
                         segments[numberOfSegments-1] = newMaxSegment;
                     }
                 }
-                //Need to check for multiples of segment containing same points but different order
+                else {
+                    count = 1;
+                }
+                
             }
         }
     }
@@ -57,7 +94,6 @@ public class FastCollinearPoints {
     public static void main(String[] args) {
         // read the N points from a file
         
-        //System.out.println("Rand: " + StdRandom.uniform(1,11));
         In in = new In(args[0]);
         int N = in.readInt();
         
@@ -79,7 +115,7 @@ public class FastCollinearPoints {
         StdDraw.show();
         
         // print and draw the line segments
-        BruteCollinearPoints collinear = new BruteCollinearPoints(points);
+        FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             if(segment != null) {  //Might have to resize array to take out null entries 
                 StdOut.println(segment);

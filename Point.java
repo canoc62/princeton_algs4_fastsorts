@@ -63,8 +63,9 @@ public class Point implements Comparable<Point> {
         double run = this.x - that.x;
         
         if (rise == 0 && run != 0) {
-            if (rise == 0 && run > 0) return +0.0;
-            else if (rise == 0 && run < 0) return -0.0;
+           // if (rise == 0 && run > 0) return +0.0;
+            //else if (rise == 0 && run < 0) return -0.0;
+            return +0.0;
         }
         if (run == 0) {
             if (rise >= 0) return Double.POSITIVE_INFINITY;
