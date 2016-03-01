@@ -8,10 +8,11 @@ import edu.princeton.cs.algs4.StdRandom;
 public class BruteCollinearPoints {
     
     private LineSegment[] segments = new LineSegment[1];
+    private LineSegment[] copyOfSegments;
     private int numberOfSegments = 0;
     
     private void resize(int length) {
-        LineSegment[] newArr = new LineSegment[segments.length*2];
+        LineSegment[] newArr = new LineSegment[length];
         
         for (int i = 0; i < segments.length; i++) {
             newArr[i] = segments[i];
@@ -82,6 +83,8 @@ public class BruteCollinearPoints {
             }
             
         }
+        //LineSegment[] copyOfSegments = Arrays.copyOf(segments, numberOfSegments);
+        if (numberOfSegments > 0) resize(numberOfSegments());
     }
     
     public int numberOfSegments() {
@@ -89,7 +92,6 @@ public class BruteCollinearPoints {
     }
     
     public LineSegment[] segments() {
-        
         return segments;
     }
     

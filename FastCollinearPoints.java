@@ -4,15 +4,17 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdRandom;
+import java.util.ArrayList;
 
 public class FastCollinearPoints {
     
     private Point[] copyOfPoints;
     private LineSegment[] segments = new LineSegment[1];
+    private LineSegment[] copyOfSegments;
     private int numberOfSegments = 0;
     
     private void resize(int length) {
-        LineSegment[] newArr = new LineSegment[segments.length*2];
+        LineSegment[] newArr = new LineSegment[length];
         
         for (int i = 0; i < segments.length; i++) {
             newArr[i] = segments[i];
@@ -40,60 +42,69 @@ public class FastCollinearPoints {
         copyOfPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++) {
             copyOfPoints[i] = points[i];
-            //System.out.println(copyOfPoints[i]);
+            System.out.println(copyOfPoints[i]);
         }
         
         int N = points.length;
-        
+        boolean maxSegment = true;
         for (int i = 0; i < N; i++) {
             Arrays.sort(copyOfPoints);
             Arrays.sort(copyOfPoints, points[i].slopeOrder());
-          // for (int x = 0; x < points.length; x++) {
-            //copyOfPoints[x] = points[i];
-           // System.out.println(copyOfPoints[x]);
-      // }
+        
             int count = 1;
+           //System.out.println("Points[i]: " + points[i]);
            
-            //System.out.println("\nPOINT i: " + points[i] + "\n");
-            
-            for (int j = 1; j < N-1; j++) {
-          
-                //System.out.println("j - 1: " + copyOfPoints[j-1] + " slope: " + points[i].slopeTo(copyOfPoints[j-1]));
-                //System.out.println("j: " + copyOfPoints[j] + " slope: " + points[i].slopeTo(copyOfPoints[j]));
+           // System.out.println("\nPOINT i: " + points[i] + "\n");
+            maxSegment = true;
+            for (int j = 1; j < N; j++) {
+          //System.out.println("copyOfPoints[j]: " + copyOfPoints[j]);
+               // System.out.println("j - 1: " + copyOfPoints[j-1] + " slope: " + points[i].slopeTo(copyOfPoints[j-1]));
+               //System.out.println("j: " + copyOfPoints[j] + " slope: " + points[i].slopeTo(copyOfPoints[j]));
                 if (points[i].slopeTo(copyOfPoints[j]) == points[i].slopeTo(copyOfPoints[j-1])) {
-                    //if(points[i].compareTo(copyOfPoints[j]) > 0) { 
-                      //  count = 0;
-                    //}
-                    //else {
-                        count++;
-                    //}
-                        if(points[i].compareTo(copyOfPoints[j-1]) > 0) { //|| points[i].compareTo(copyOfPoints[j]) > 0) { 
-                        //count = 0;
-                        //i++;
-                        break;
-                    }
-                     
-                    //System.out.println("count: " + count);
                     
-                    if (count == 3 ){//&& points[i].compareTo(copy)) {
+                    count++;
+                    if (points[i].compareTo(copyOfPoints[j]) > 0 || points[i].compareTo(copyOfPoints[j-1]) > 0) {
+                        maxSegment = false;
+                        //count = 1;
+                    }
+                   
+                   // if (points[i].compareTo(copyOfPoints[j-1])
+                   // if (points[i].compareTo(copyOfPoints[j-1]) > 0) {  
+                    //   System.out.println("greater.");
+                    //   count = 1;
+                    //   break;
+                    //}
+                     
+                   // System.out.println("count: " + count);
+                    
+                    if (count == 3 && maxSegment == true){//&& points[i].compareTo(copy)) {
                         //if(points[i].compareTo(copyOfPoints[j]) , 0) 
+                        
                         LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
                         if (segments.length == numberOfSegments) resize(segments.length*2);      
                         segments[numberOfSegments++] = newMaxSegment;
                         
                     }
-                    else if (count > 3) {
-                        segments[numberOfSegments-1] = null;
+                    else if (count > 3 && maxSegment == true) {
+                       // System.out.println("Over 3.");
+                        //segments[numberOfSegments-1] = null;
                         LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
                         segments[numberOfSegments-1] = newMaxSegment;
                     }
                 }
                 else {
                     count = 1;
+                    maxSegment = true;
                 }
                 
             }
         }
+        //LineSegment[] copyOfSegments = Arrays.copyOf(segments, numberOfSegments);
+        //System.out.println(numberOfSegments());
+       if (numberOfSegments() > 0) resize(numberOfSegments());
+        //System.out.println(numberOfSegments);
+        //if (numberOfSegments > 0) resize(1); //so that it avoids run time error
+        
     }
     
     public int numberOfSegments() {
@@ -135,6 +146,9 @@ public class FastCollinearPoints {
                 segment.draw();
             }
         }
+        //for (int i = 0; i < collinear.segments().length; i++) {
+         //   StdOut.println(collinear.segments()[i]);
+        //}
 
     }
     
