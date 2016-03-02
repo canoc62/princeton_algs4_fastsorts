@@ -7,14 +7,14 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class BruteCollinearPoints {
     
+    private Point[] copyOfPoints;
     private LineSegment[] segments = new LineSegment[1];
-    private LineSegment[] copyOfSegments;
     private int numberOfSegments = 0;
     
     private void resize(int length) {
         LineSegment[] newArr = new LineSegment[length];
         
-        for (int i = 0; i < segments.length; i++) {
+        for (int i = 0; i < numberOfSegments; i++) {
             newArr[i] = segments[i];
         }
         
@@ -35,43 +35,39 @@ public class BruteCollinearPoints {
             throw new NullPointerException();                   
         }
         
-        Arrays.sort(points);
-        checkForDuplicates(points);
-         
         int N = points.length;
+        copyOfPoints = new Point[N];
+        
+        for (int i = 0; i < points.length; i++) {
+            copyOfPoints[i] = points[i];
+        }
+        Arrays.sort(copyOfPoints);
+        checkForDuplicates(copyOfPoints);
         
         for (int i = 0; i < N-3; i++) {
-            if (points[i] == null) {
+            if (copyOfPoints[i] == null) {
                 throw new NullPointerException();
             }
             
-            Point firstPoint = points[i];
+            Point firstPoint = copyOfPoints[i];
             
             for (int j = i + 1; j < N-2; j++) { 
-                Point secondPoint = points[j];
+                Point secondPoint = copyOfPoints[j];
                 double segmentSlope = firstPoint.slopeTo(secondPoint);
                 
                 for (int k = j + 1; k < N-1; k++) {
-                    Point thirdPoint = points[k];
+                    Point thirdPoint = copyOfPoints[k];
                    
                     if (segmentSlope == secondPoint.slopeTo(thirdPoint) ) { 
                         
                         for (int l = k + 1; l < N; l++) {
-                            Point fourthPoint = points[l];
+                            Point fourthPoint = copyOfPoints[l];
                             
                             double thirdToFourthSlope = thirdPoint.slopeTo(fourthPoint);
                  
                             if (segmentSlope == thirdPoint.slopeTo(fourthPoint)) {
                                 
-                                /* Print out points of segment for debugging purposes.
-                                System.out.println("first point: " + firstPoint);
-                                System.out.println("second point: " + secondPoint);
-                                System.out.println("third point: " + thirdPoint);
-                                System.out.println("fourth point: " + fourthPoint);
-                                */ 
-                                
                                 LineSegment maximal = new LineSegment(firstPoint, fourthPoint);
-                                //System.out.println("New max line segment: " + maximal);
                                 if (segments.length == numberOfSegments) resize(segments.length*2);
                                 segments[numberOfSegments++] = maximal;
                                 
@@ -83,8 +79,6 @@ public class BruteCollinearPoints {
             }
             
         }
-        //LineSegment[] copyOfSegments = Arrays.copyOf(segments, numberOfSegments);
-        if (numberOfSegments > 0) resize(numberOfSegments());
     }
     
     public int numberOfSegments() {
@@ -92,7 +86,7 @@ public class BruteCollinearPoints {
     }
     
     public LineSegment[] segments() {
-        return segments;
+        return Arrays.copyOf(segments, numberOfSegments);
     }
     
     public static void main(String[] args) {
@@ -121,7 +115,7 @@ public class BruteCollinearPoints {
         // print and draw the line segments
         BruteCollinearPoints collinear = new BruteCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
-            if(segment != null) {  //Might have to resize array to take out null entries 
+            if(segment != null) {  
                 StdOut.println(segment);
                 segment.draw();
             }

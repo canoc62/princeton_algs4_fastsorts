@@ -62,20 +62,18 @@ public class Point implements Comparable<Point> {
         if (that == null) {
             throw new NullPointerException();
         }
-        double rise = that.y - this.y;//this.y - that.y;
-        double run = that.x - this.x;//this.x - that.x;
         
-        if (run == 0) {
-            if (rise == 0) return Double.NEGATIVE_INFINITY;
+        if ((that.x - this.x) == 0) {
+            if ((that.y - this.y) == 0) return Double.NEGATIVE_INFINITY;
             else return Double.POSITIVE_INFINITY;
         }
         
-        if (rise == 0) {
+        if ((that.y - this.y) == 0) {
             return +0.0;
         }
         
-        double slope = rise/run;
-        return slope;
+        
+        return (double) (that.y - this.y)/(that.x - this.x);
     }
 
     /**
@@ -97,7 +95,7 @@ public class Point implements Comparable<Point> {
         else if ( (this.y > that.y) || (this.y == that.y && this.x > that.x) ) {
             return 1;
         }
-        else {//( (this.y == that.y) && (this.x == that.x) ) 
+        else {
             return 0;
         }
                  
@@ -110,17 +108,12 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        return SLOPE_ORDER;/* YOUR CODE HERE */
+        return new SlopeOrder();
     }
-    
-    private final Comparator<Point> SLOPE_ORDER = new SlopeOrder();
-    
+     
     private class SlopeOrder implements Comparator<Point> {
         public int compare(Point p1, Point p2) {
-            double slope1 = Point.this.slopeTo(p1);
-            double slope2 = Point.this.slopeTo(p2);
-            
-            return Double.compare(slope1, slope2);
+            return Double.compare(slopeTo(p1), slopeTo(p2));
         }
     }
 
