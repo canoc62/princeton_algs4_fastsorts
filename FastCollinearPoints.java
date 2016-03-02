@@ -1,10 +1,7 @@
 import java.util.Arrays;
 import edu.princeton.cs.algs4.*;
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdRandom;
-import java.util.ArrayList;
 
 public class FastCollinearPoints {
     
@@ -45,27 +42,28 @@ public class FastCollinearPoints {
         int N = points.length;
         boolean maxSegment = true;
         for (int i = 0; i < N; i++) {
+            Point p = points[i];
             Arrays.sort(copyOfPoints);//Sort so that points are in natural order
-            Arrays.sort(copyOfPoints, points[i].slopeOrder());//Then sort so that points are in order by slope
+            Arrays.sort(copyOfPoints, p.slopeOrder());//Then sort so that points are in order by slope
         
             int count = 1;
-       
             maxSegment = true;
+            
             for (int j = 1; j < N; j++) {
-                if (points[i].slopeTo(copyOfPoints[j]) == points[i].slopeTo(copyOfPoints[j-1])) {
+                if (p.slopeTo(copyOfPoints[j]) == p.slopeTo(copyOfPoints[j-1])) {
                     count++;
-                    if (points[i].compareTo(copyOfPoints[j]) > 0 || points[i].compareTo(copyOfPoints[j-1]) > 0) {
+                    
+                    if (p.compareTo(copyOfPoints[j]) > 0 || p.compareTo(copyOfPoints[j-1]) > 0) {
                         maxSegment = false;
                     }
                     
-                    if (count == 3 && maxSegment == true){
-                        LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
+                    if (count == 3 && maxSegment){
+                        LineSegment newMaxSegment = new LineSegment(p, copyOfPoints[j]);
                         if (segments.length == numberOfSegments) resize(segments.length*2);      
-                        segments[numberOfSegments++] = newMaxSegment;
-                        
+                        segments[numberOfSegments++] = newMaxSegment;      
                     }
-                    else if (count > 3 && maxSegment == true) {
-                        LineSegment newMaxSegment = new LineSegment(points[i], copyOfPoints[j]);
+                    else if (count > 3 && maxSegment) {
+                        LineSegment newMaxSegment = new LineSegment(p, copyOfPoints[j]);
                         segments[numberOfSegments-1] = newMaxSegment;
                     }
                 }
