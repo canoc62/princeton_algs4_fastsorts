@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class FastCollinearPoints {
     
-    private Point[] copyOfPoints;
+    private final Point[] copyOfPoints;
     private LineSegment[] segments = new LineSegment[1];
     private int numberOfSegments = 0;
     
